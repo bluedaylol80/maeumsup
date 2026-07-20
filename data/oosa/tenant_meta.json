@@ -1,0 +1,16 @@
+{
+  "schemaVersion": "1",
+  "tenantSlug": "oosa",
+  "name": "OO사",
+  "intro": "OO사는 파일럿 검증을 위한 가상의 절입니다. 고요한 산중에서 매일 한 편의 짧은 말씀과 목탁 소리로 하루를 여는 마음을 나눕니다. 실제 절이 확정되기 전까지 마음숲의 전 기능을 이 가상 절로 라이브 점검합니다.",
+  "donationInfo": {
+    "payeeName": "OO사",
+    "notice": "시주는 절 명의의 계좌 또는 결제 수단으로만 이루어지며, 마음숲은 안내만 제공합니다. 환불·취소·영수증에 관한 사항은 절 정책에 따릅니다. (파일럿 자리표시 문안 — 법무 승인 전)",
+    "paymentUrl": "https://pay.example/oosa"
+  },
+  "settings": {
+    "timezone": "Asia/Seoul",
+    "lanternEnabled": true,
+    "donationEnabled": true
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "name": "마음숲 · OO사",
+  "short_name": "마음숲",
+  "description": "하루 한 편의 말씀과 3분 기도",
+  "lang": "ko",
+  "start_url": "/maeumsup/oosa/today/",
+  "scope": "/maeumsup/",
+  "display": "standalone",
+  "background_color": "#f4f0e6",
+  "theme_color": "#36594c",
+  "icons": [
+    {
+      "src": "/maeumsup/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/maeumsup/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

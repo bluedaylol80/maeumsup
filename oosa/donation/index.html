@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f4f0e6">
+  <meta name="description" content="마음숲에서 하루 한 편의 말씀과 3분 기도를 이어갑니다.">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data: https://assets.maumsup.example https://cdn.maumsup.example; connect-src 'self'; media-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'self'; worker-src 'self'">
+  <title>마음숲 · OO사</title>
+  <link rel="manifest" href="/maeumsup/manifest.webmanifest">
+  <link rel="icon" href="/maeumsup/icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="/maeumsup/icons/icon-192.png">
+  <link rel="stylesheet" href="/maeumsup/styles.css">
+  <script src="/maeumsup/app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#app-main">본문으로 바로가기</a>
+  <div class="offline-banner" id="offline-banner" role="status" hidden>오프라인 · 저장된 승인본일 수 있습니다</div>
+
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" id="brand-link" href="/maeumsup/oosa/today/" aria-label="마음숲 오늘 화면">
+        <span class="brand-mark" aria-hidden="true"><span></span></span>
+        <span>
+          <strong>마음숲</strong>
+          <small id="tenant-name-header">고요한 하루 의례</small>
+        </span>
+      </a>
+      <button class="quiet-button" id="open-more" type="button" aria-haspopup="dialog" aria-controls="more-panel" aria-expanded="false">메뉴</button>
+    </header>
+
+    <main id="app-main" tabindex="-1">
+      <div class="loading-state" id="loading-state" role="status">
+        <span class="loading-ring" aria-hidden="true"></span>
+        <p>고요한 마음을 준비하고 있어요</p>
+      </div>
+      <section id="screen-root" aria-live="polite"></section>
+    </main>
+
+    <nav class="bottom-nav" aria-label="주요 화면">
+      <a data-nav="today" href="/maeumsup/oosa/today/"><span class="nav-dot" aria-hidden="true"></span>오늘</a>
+      <a data-nav="lanterns" href="/maeumsup/oosa/lanterns/"><span class="nav-dot" aria-hidden="true"></span>연등</a>
+      <a data-nav="archive" href="/maeumsup/oosa/archive/"><span class="nav-dot" aria-hidden="true"></span>지난 말씀</a>
+      <button id="bottom-more" type="button" aria-haspopup="dialog" aria-controls="more-panel" aria-expanded="false"><span class="nav-dot" aria-hidden="true"></span>더보기</button>
+    </nav>
+  </div>
+
+  <div class="sheet-backdrop" id="sheet-backdrop" hidden></div>
+  <section class="more-panel" id="more-panel" role="dialog" aria-modal="true" aria-labelledby="more-title" hidden>
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="sheet-heading">
+      <h2 id="more-title">마음숲 둘러보기</h2>
+      <button class="close-button" id="close-more" type="button" aria-label="메뉴 닫기">닫기</button>
+    </div>
+    <nav class="all-nav" aria-label="전체 화면">
+      <a data-menu="today" href="/maeumsup/oosa/today/"><strong>오늘의 의례</strong><span>말씀 · 목탁 3분 · 기도</span></a>
+      <a data-menu="lanterns" href="/maeumsup/oosa/lanterns/"><strong>연등 현황</strong><span>개인정보 없는 익명 집계</span></a>
+      <a data-menu="donation" href="/maeumsup/oosa/donation/"><strong>시주 안내</strong><span>절 명의 연결과 유의사항</span></a>
+      <a data-menu="temple" href="/maeumsup/oosa/temple/"><strong>절 소개</strong><span>이곳의 이야기를 전합니다</span></a>
+      <a data-menu="archive" href="/maeumsup/oosa/archive/"><strong>지난 말씀</strong><span>날짜별 읽기 전용 기록</span></a>
+      <a data-menu="settings" href="/maeumsup/oosa/settings/"><strong>설정</strong><span>이 기기에 남은 데이터 관리</span></a>
+    </nav>
+  </section>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+</body>
+</html>

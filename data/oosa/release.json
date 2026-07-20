@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "1",
+  "tenant": "oosa",
+  "type": "release",
+  "releaseId": "rel-20260719T070513Z",
+  "manifestHash": "sha256:dc5f5b10f2d7596819591906f5131ab7d7c6b18804eb7911eebc591f6002ad85",
+  "createdAt": "2026-07-19T16:05:13+09:00"
+}
