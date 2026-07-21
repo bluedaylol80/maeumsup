@@ -135,6 +135,7 @@
   }
 
   function showScreen(element) {
+    if (timerId) { clearInterval(timerId); timerId = null; }   // 이전 화면(목탁) 타이머 정리 — SPA 전환 중복 방지
     clear(screenRoot);
     screenRoot.appendChild(element);
     loadingState.hidden = true;
@@ -815,23 +816,72 @@
     startButton.focus();
   }
 
+  // 화면별 렌더러 (SPA 네비게이션·초기 boot 공용)
+  const RENDERERS = {
+    today: renderToday,
+    lanterns: renderLanterns,
+    donation: renderDonation,
+    temple: renderTemple,
+    settings: renderSettings,
+    archive: renderArchive
+  };
+
+  function routeFromHref(href) {
+    try {
+      const parts = new URL(href, location.href).pathname.split("/").filter(Boolean);
+      for (let i = parts.length - 1; i >= 0; i -= 1) if (ROUTES.has(parts[i])) return parts[i];
+    } catch (e) { /* 무시 */ }
+    return null;
+  }
+
+  function closeMorePanel() {
+    const panel = document.getElementById("more-panel");
+    if (!panel || panel.hidden) return;
+    panel.hidden = true;
+    const backdrop = document.getElementById("sheet-backdrop");
+    if (backdrop) backdrop.hidden = true;
+    for (const opener of [document.getElementById("open-more"), document.getElementById("bottom-more")]) {
+      if (opener) opener.setAttribute("aria-expanded", "false");
+    }
+  }
+
+  // 화면 이동을 페이지 새로고침이 아니라 앱 내부 전환(render)으로 처리한다.
+  // 페이지가 유지되므로 배경 음악(BGM) 오디오·재생 위치가 끊기지 않는다.
+  async function navigateTo(href, push) {
+    const route = routeFromHref(href);
+    if (!route) { window.location.href = href; return; }   // 라우트 아님 → 일반 이동
+    if (push !== false) { try { history.pushState({ route: route }, "", href); } catch (e) {} }
+    closeMorePanel();
+    setNavigation(route);
+    window.scrollTo(0, 0);
+    try { await RENDERERS[route](); } catch (error) { renderDataError(error); }
+  }
+
+  function setupSpaNav() {
+    document.addEventListener("click", (event) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      const link = event.target.closest ? event.target.closest("a[href]") : null;
+      if (!link || link.target === "_blank") return;
+      const href = link.getAttribute("href");
+      if (!href || href.startsWith("#") || href.startsWith("http")) return;
+      if (!routeFromHref(href)) return;   // 라우트 링크가 아니면 브라우저 기본 동작
+      event.preventDefault();
+      navigateTo(href, true);
+    });
+    window.addEventListener("popstate", () => { navigateTo(location.href, false); });
+  }
+
   async function boot() {
     applyTextScale(safeGet("textScale"));
     setupMenu();
     setupBgm();
+    setupSpaNav();
     updateConnectivity();
     window.addEventListener("online", updateConnectivity);
     window.addEventListener("offline", updateConnectivity);
     const route = getRoute();
     setNavigation(route);
-    const renderers = {
-      today: renderToday,
-      lanterns: renderLanterns,
-      donation: renderDonation,
-      temple: renderTemple,
-      settings: renderSettings,
-      archive: renderArchive
-    };
+    const renderers = RENDERERS;
 
     const swActive = "serviceWorker" in navigator && location.protocol !== "file:";
     if (swActive) {

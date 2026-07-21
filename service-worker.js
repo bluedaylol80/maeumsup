@@ -13,7 +13,7 @@
 //   · 콘텐츠(/data/<tenant>/*.json)        = network-first + evict-on-non-OK + offline 폴백
 //   · release marker(manifestHash)          = release 변경 시 콘텐츠 캐시 무효화
 
-const SHELL_VERSION = "v7";                     // v4=온보딩·v5=BGM·v6=모바일개선·v7=오디오 SW 바이패스(range 재생 fix, 2026-07-21).
+const SHELL_VERSION = "v8";                     // v4=온보딩·v5=BGM·v6=모바일개선·v7=오디오SW바이패스·v8=SPA 네비(BGM 무중단, 2026-07-21).
 const SHELL_CACHE = `maumsup-shell-${SHELL_VERSION}`;
 const CONTENT_CACHE = "maumsup-content-v3";      // 콘텐츠 network-first 캐시(고정 이름)
 const META_CACHE = "maumsup-meta";              // release 포인터 보관(SW 재시작 생존)
