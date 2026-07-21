@@ -741,6 +741,62 @@ input:focus-visible {
   .archive-date { font-size: 1.46rem; }
 }
 
+/* 첫 사용 온보딩 오버레이 */
+.welcome-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 22px;
+  background: rgba(36, 40, 32, 0.44);
+  backdrop-filter: blur(4px);
+  animation: welcome-fade 0.28s ease;
+}
+.welcome-card {
+  width: min(420px, 100%);
+  max-height: calc(100dvh - 44px);
+  overflow-y: auto;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 30px 26px 26px;
+  text-align: center;
+}
+.welcome-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: var(--pine);
+  color: #fff;
+  font-family: Georgia, "Noto Serif KR", serif;
+  font-size: 24px;
+}
+.welcome-title { margin: 16px 0 8px; font-family: Georgia, "Noto Serif KR", serif; font-size: 24px; letter-spacing: -0.02em; color: var(--ink); }
+.welcome-sub { margin: 0 0 20px; color: var(--muted); line-height: 1.65; font-size: 14.5px; }
+.welcome-steps { display: grid; gap: 12px; text-align: left; margin-bottom: 22px; }
+.welcome-step { display: flex; gap: 13px; align-items: flex-start; padding: 13px 15px; border-radius: 14px; background: var(--pine-soft); }
+.welcome-step-label { flex: 0 0 auto; min-width: 42px; padding: 4px 0; text-align: center; border-radius: 9px; background: var(--pine); color: #fff; font-size: 12.5px; font-weight: 700; }
+.welcome-step-desc { margin: 2px 0 0; color: #33413a; line-height: 1.6; font-size: 13.5px; }
+.welcome-start {
+  width: 100%;
+  border: 0;
+  border-radius: 14px;
+  padding: 15px;
+  background: var(--pine);
+  color: #fff;
+  font-size: 15.5px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.welcome-start:hover { background: var(--pine-deep); }
+.welcome-foot { margin: 13px 0 0; color: var(--muted); font-size: 12px; }
+@keyframes welcome-fade { from { opacity: 0; } to { opacity: 1; } }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; }
 }

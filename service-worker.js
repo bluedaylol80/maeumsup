@@ -13,7 +13,7 @@
 //   · 콘텐츠(/data/<tenant>/*.json)        = network-first + evict-on-non-OK + offline 폴백
 //   · release marker(manifestHash)          = release 변경 시 콘텐츠 캐시 무효화
 
-const SHELL_VERSION = "v3";                     // 셸(정적 자산) 변경 시에만 bump
+const SHELL_VERSION = "v4";                     // 셸(정적 자산) 변경 시에만 bump. v4=첫 사용 온보딩(2026-07-21).
 const SHELL_CACHE = `maumsup-shell-${SHELL_VERSION}`;
 const CONTENT_CACHE = "maumsup-content-v3";      // 콘텐츠 network-first 캐시(고정 이름)
 const META_CACHE = "maumsup-meta";              // release 포인터 보관(SW 재시작 생존)

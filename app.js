@@ -575,10 +575,18 @@
       node("p", { className: "settings-copy", text: "이 브라우저에 저장된 기도 완료와 글자 설정을 모두 지웁니다. 절이나 다른 기기로 전송된 데이터는 없습니다." }),
       resetButton
     );
-    append(card, textGroup, resetGroup);
+    const guideGroup = node("section", { className: "settings-group", attrs: { "aria-labelledby": "guide-title" } });
+    const guideButton = node("button", { id: "show-welcome-again", className: "choice-button", text: "앱 사용 안내 다시 보기", attrs: { type: "button" } });
+    append(guideGroup,
+      node("h2", { id: "guide-title", className: "settings-title", text: "앱 사용 안내" }),
+      node("p", { className: "settings-copy", text: "마음숲이 무엇이고 어떻게 쓰는지 처음 안내를 다시 봅니다." }),
+      guideButton
+    );
+    append(card, textGroup, guideGroup, resetGroup);
     append(page, sectionWrap(card));
     showScreen(page);
     document.title = `설정 · 마음숲`;
+    guideButton.addEventListener("click", () => showWelcome(true));
 
     function selectScale(value) {
       safeSet("textScale", value);
@@ -689,6 +697,50 @@
     document.body.classList.toggle("is-offline", !navigator.onLine);
   }
 
+  // 첫 사용 온보딩. 처음 방문한 신도에게 이 앱이 무엇이고 어떻게 쓰는지, 그리고 개인정보를
+  // 모으지 않는다는 점을 조용히 안내한다. 본 적 있으면(localStorage) 뜨지 않는다.
+  // force=true(설정의 '다시 보기')면 항상 표시. 개인정보 무수집 원칙에 맞게 로컬 플래그만 사용.
+  function showWelcome(force = false) {
+    if (!force && safeGet("welcomeSeen") === "1") return;
+    const prior = document.getElementById("welcome-overlay");
+    if (prior) prior.remove();
+    const overlay = node("div", { id: "welcome-overlay", className: "welcome-overlay", attrs: { role: "dialog", "aria-modal": "true", "aria-labelledby": "welcome-title" } });
+    const card = node("div", { className: "welcome-card" });
+    append(card,
+      node("span", { className: "welcome-mark", text: "숲", attrs: { "aria-hidden": "true" } }),
+      node("h2", { id: "welcome-title", className: "welcome-title", text: "마음숲에 오신 것을 환영합니다" }),
+      node("p", { className: "welcome-sub", text: "매일 한 편의 말씀으로 마음을 챙기는 조용한 공간입니다." })
+    );
+    const steps = node("div", { className: "welcome-steps" });
+    const points = [
+      ["오늘", "오늘의 말씀을 읽고, 목탁 소리로 3분 호흡한 뒤, 짧은 기도로 하루를 엽니다."],
+      ["연등", "함께 밝힌 마음을 이름 없이 ‘몇 분이 함께했는지’ 수로만 보여드립니다."],
+      ["안심", "이름도 계정도 묻지 않습니다. 기도 기록은 이 휴대폰에만 남고, 어디로도 전송되지 않습니다."]
+    ];
+    for (const [label, desc] of points) {
+      const step = node("div", { className: "welcome-step" });
+      append(step,
+        node("span", { className: "welcome-step-label", text: label }),
+        node("p", { className: "welcome-step-desc", text: desc })
+      );
+      append(steps, step);
+    }
+    append(card, steps);
+    const startButton = node("button", { className: "welcome-start", text: "시작하기", attrs: { type: "button" } });
+    append(card, startButton, node("p", { className: "welcome-foot", text: "이 안내는 언제든 설정에서 다시 볼 수 있어요." }));
+    append(overlay, card);
+    document.body.appendChild(overlay);
+    function close() {
+      safeSet("welcomeSeen", "1");
+      overlay.remove();
+      document.removeEventListener("keydown", onKey);
+    }
+    function onKey(event) { if (event.key === "Escape") close(); }
+    startButton.addEventListener("click", close);
+    document.addEventListener("keydown", onKey);
+    startButton.focus();
+  }
+
   async function boot() {
     applyTextScale(safeGet("textScale"));
     setupMenu();
@@ -723,6 +775,9 @@
     } catch (error) {
       renderDataError(error);
     }
+
+    // 첫 방문 온보딩은 메인 진입(오늘)에서만 조용히 띄운다.
+    if (route === "today") showWelcome();
 
     // 첫 방문(비제어): SW 설치 후 다음 방문의 무효화 기준선을 잡도록 marker 를 비차단 프리페치.
     if (swActive && !navigator.serviceWorker.controller) {
