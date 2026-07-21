@@ -1,0 +1,53 @@
+{
+  "schemaVersion": "2",
+  "tenantSlug": "hansol",
+  "name": "한솔사",
+  "intro": "한솔사는 다절 이용 패턴 검증을 위한 두 번째 파일럿 절입니다. 도심 가까운 언덕에 자리해, 바쁜 하루 속에서도 잠시 마음을 내려놓는 도량으로 설정했습니다.",
+  "profile": {
+    "order": "대한불교조계종 (파일럿 표기)",
+    "foundedNote": "가상 창건 정보 — 실제 절 확정 시 감수된 연혁으로 교체됩니다.",
+    "region": "도심 언덕 (가상)",
+    "address": "OO시 OO구 OO로 (가상 주소)",
+    "phone": "",
+    "directions": "지하철 OO역 도보 10분 (가상). 실제 절 확정 시 정확한 길 안내로 교체됩니다.",
+    "hours": "사시 예불 10:00 · 저녁 예불 18:30 (가상 일과)"
+  },
+  "schedule": [
+    { "id": "svc-sat", "kind": "정기법회", "title": "토요 저녁 명상법회", "when": "매주 토요일 19:00", "place": "법당", "desc": "한 주의 피로를 내려놓는 저녁 명상과 짧은 법문.", "recurring": true },
+    { "id": "evt-newyear", "kind": "재·행사", "title": "신년 기도 입재", "when": "양력 1월 초 (7일 기도)", "place": "법당", "desc": "새해 발원 7일 기도. 동참 접수는 종무소 안내를 따릅니다.", "recurring": false },
+    { "id": "evt-lunch", "kind": "프로그램", "title": "직장인 점심 명상", "when": "매월 첫째 수요일 12:10", "place": "지하 명상실", "desc": "점심시간 20분 짧은 명상. 예약 없이 편히 오세요.", "recurring": true }
+  ],
+  "news": [
+    { "id": "n-2", "date": "2026-07-16", "title": "여름 저녁 명상법회 시간 조정", "body": "무더위로 7~8월 토요 명상법회를 19:00으로 조정합니다." },
+    { "id": "n-1", "date": "2026-07-05", "title": "한솔사, 마음숲 앱 입점 안내", "body": "이제 한솔사 소식과 일정을 마음숲 앱에서 함께 받아보실 수 있습니다." }
+  ],
+  "lantern": {
+    "notice": "연등 접수·금액·점등은 한솔사 종무소 안내를 따릅니다. 마음숲은 안내만 제공합니다. (파일럿 표시 문안)",
+    "types": [
+      { "name": "소원등", "desc": "한 가지 소원을 담아 밝힙니다." },
+      { "name": "가족등", "desc": "가족의 평안을 발원합니다." }
+    ],
+    "howto": "접수는 종무소 방문 또는 절 공식 연락처로 문의해 주세요.",
+    "contactLabel": "연등 접수 문의",
+    "contactUrl": ""
+  },
+  "campaigns": [
+    {
+      "id": "c-myeongsang",
+      "title": "지하 명상실 리모델링 후원",
+      "purpose": "직장인·청년을 위한 지하 명상실을 넓히고 방음을 보강하는 불사입니다.",
+      "unit": "좌복·방음재 후원",
+      "receiptNote": "후원금에 대한 기부금영수증 발급 여부·방법은 절 종무소에서 안내합니다.",
+      "progressNote": "진행 현황은 절 공식 집계를 따릅니다. 파일럿에서는 예시로만 표시됩니다.",
+      "goalDisplay": "목표 — 절 공식 안내",
+      "participateLabel": "후원 참여 문의",
+      "participateUrl": ""
+    }
+  ],
+  "donationInfo": {
+    "payeeName": "한솔사",
+    "notice": "시주·후원·기부는 절 명의의 계좌 또는 결제 수단으로만 이루어지며, 마음숲은 안내만 제공합니다. (파일럿 자리표시 문안 — 법무 승인 전)",
+    "paymentUrl": ""
+  },
+  "settings": { "timezone": "Asia/Seoul", "lanternEnabled": true, "donationEnabled": true }
+}

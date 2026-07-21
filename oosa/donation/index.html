@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#f4f0e6">
-  <meta name="description" content="마음숲에서 하루 한 편의 말씀과 3분 기도를 이어갑니다.">
+  <meta name="description" content="마음숲에서 여러 절의 하루 한 편 말씀과 일정·소식을 이어갑니다.">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' data: https://assets.maumsup.example https://cdn.maumsup.example; connect-src 'self'; media-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; manifest-src 'self'; worker-src 'self'">
-  <title>마음숲 · OO사</title>
+  <title>마음숲</title>
   <link rel="manifest" href="/maeumsup/manifest.webmanifest">
   <link rel="icon" href="/maeumsup/icons/icon-192.png" type="image/png">
   <link rel="apple-touch-icon" href="/maeumsup/icons/icon-192.png">
@@ -19,13 +19,14 @@
 
   <div class="site-shell">
     <header class="site-header">
-      <a class="brand" id="brand-link" href="/maeumsup/oosa/today/" aria-label="마음숲 오늘 화면">
+      <a class="brand" id="brand-link" href="/maeumsup/discover/" aria-label="마음숲 홈">
         <span class="brand-mark" aria-hidden="true"><span></span></span>
-        <span>
-          <strong>마음숲</strong>
-          <small id="tenant-name-header">고요한 하루 의례</small>
-        </span>
+        <strong class="brand-name">마음숲</strong>
       </a>
+      <button class="temple-switch" id="temple-switch" type="button" aria-haspopup="dialog" aria-controls="temple-panel" aria-expanded="false">
+        <span id="tenant-name-header">마음숲</span>
+        <span class="switch-caret" aria-hidden="true"></span>
+      </button>
       <button class="quiet-button" id="open-more" type="button" aria-haspopup="dialog" aria-controls="more-panel" aria-expanded="false">메뉴</button>
     </header>
 
@@ -40,26 +41,41 @@
     <nav class="bottom-nav" aria-label="주요 화면">
       <a data-nav="today" href="/maeumsup/oosa/today/"><span class="nav-dot" aria-hidden="true"></span>오늘</a>
       <a data-nav="lanterns" href="/maeumsup/oosa/lanterns/"><span class="nav-dot" aria-hidden="true"></span>연등</a>
-      <a data-nav="archive" href="/maeumsup/oosa/archive/"><span class="nav-dot" aria-hidden="true"></span>지난 말씀</a>
+      <a data-nav="schedule" href="/maeumsup/oosa/schedule/"><span class="nav-dot" aria-hidden="true"></span>일정</a>
       <button id="bottom-more" type="button" aria-haspopup="dialog" aria-controls="more-panel" aria-expanded="false"><span class="nav-dot" aria-hidden="true"></span>더보기</button>
     </nav>
   </div>
 
   <div class="sheet-backdrop" id="sheet-backdrop" hidden></div>
+
   <section class="more-panel" id="more-panel" role="dialog" aria-modal="true" aria-labelledby="more-title" hidden>
     <div class="sheet-handle" aria-hidden="true"></div>
     <div class="sheet-heading">
       <h2 id="more-title">마음숲 둘러보기</h2>
-      <button class="close-button" id="close-more" type="button" aria-label="메뉴 닫기">닫기</button>
+      <button class="close-button" type="button" aria-label="메뉴 닫기">닫기</button>
     </div>
     <nav class="all-nav" aria-label="전체 화면">
       <a data-menu="today" href="/maeumsup/oosa/today/"><strong>오늘의 의례</strong><span>말씀 · 목탁 3분 · 기도</span></a>
-      <a data-menu="lanterns" href="/maeumsup/oosa/lanterns/"><strong>연등 현황</strong><span>개인정보 없는 익명 집계</span></a>
-      <a data-menu="donation" href="/maeumsup/oosa/donation/"><strong>시주 안내</strong><span>절 명의 연결과 유의사항</span></a>
-      <a data-menu="temple" href="/maeumsup/oosa/temple/"><strong>절 소개</strong><span>이곳의 이야기를 전합니다</span></a>
+      <a data-menu="lanterns" href="/maeumsup/oosa/lanterns/"><strong>연등</strong><span>익명 집계 · 연등 접수 안내</span></a>
+      <a data-menu="schedule" href="/maeumsup/oosa/schedule/"><strong>일정</strong><span>법회 · 재·행사 · 프로그램</span></a>
+      <a data-menu="news" href="/maeumsup/oosa/news/"><strong>소식</strong><span>절의 안내와 공지</span></a>
+      <a data-menu="temple" href="/maeumsup/oosa/temple/"><strong>절 정보</strong><span>소개 · 오시는 길 · 연락처</span></a>
+      <a data-menu="donation" href="/maeumsup/oosa/donation/"><strong>시주·기부</strong><span>절 명의 안내 · 불사 후원</span></a>
       <a data-menu="archive" href="/maeumsup/oosa/archive/"><strong>지난 말씀</strong><span>날짜별 읽기 전용 기록</span></a>
+      <a data-menu="discover" href="/maeumsup/discover/"><strong>사찰 찾기</strong><span>절 찾기 · 내 절 관리</span></a>
       <a data-menu="settings" href="/maeumsup/oosa/settings/"><strong>설정</strong><span>이 기기에 남은 데이터 관리</span></a>
     </nav>
+  </section>
+
+  <section class="more-panel switch-panel" id="temple-panel" role="dialog" aria-modal="true" aria-labelledby="switch-title" hidden>
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <div class="sheet-heading">
+      <h2 id="switch-title">절 바꾸기</h2>
+      <button class="close-button" type="button" aria-label="절 바꾸기 닫기">닫기</button>
+    </div>
+    <p class="group-label" id="switch-list-label">내 절</p>
+    <div class="switch-temple-list" id="switch-temple-list"></div>
+    <a class="secondary-link" data-menu="discover" href="/maeumsup/discover/">다른 절 찾기 · 내 절 관리</a>
   </section>
 
   <div class="toast" id="toast" role="status" hidden></div>

@@ -1,0 +1,8 @@
+{
+  "schemaVersion": "1",
+  "tenant": "hansol",
+  "type": "release",
+  "releaseId": "rel-hansol-20260718T070000Z",
+  "manifestHash": "sha256:5c5a36378c8813c40a54736ca5ea89cad7526995e5ad349587fcbfe63b5f5c2a",
+  "createdAt": "2026-07-18T16:00:00+09:00"
+}

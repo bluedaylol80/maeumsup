@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "1",
+  "tenantSlug": "hansol",
+  "dates": [
+    "2026-07-19",
+    "2026-07-20",
+    "2026-07-21",
+    "2026-07-22",
+    "2026-07-23"
+  ],
+  "anonymousLanternCount": 42,
+  "aggregateAsOf": "2026-07-18"
+}

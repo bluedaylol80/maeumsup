@@ -13,7 +13,7 @@
 //   · 콘텐츠(/data/<tenant>/*.json)        = network-first + evict-on-non-OK + offline 폴백
 //   · release marker(manifestHash)          = release 변경 시 콘텐츠 캐시 무효화
 
-const SHELL_VERSION = "v8";                     // v4=온보딩·v5=BGM·v6=모바일개선·v7=오디오SW바이패스·v8=SPA 네비(BGM 무중단, 2026-07-21).
+const SHELL_VERSION = "v9";                     // v4=온보딩·v5=BGM·v6=모바일개선·v7=오디오SW바이패스·v8=SPA 네비(BGM 무중단)·v9=다절 포털+오프라인 네비 폴백(2026-07-21).
 const SHELL_CACHE = `maumsup-shell-${SHELL_VERSION}`;
 const CONTENT_CACHE = "maumsup-content-v3";      // 콘텐츠 network-first 캐시(고정 이름)
 const META_CACHE = "maumsup-meta";              // release 포인터 보관(SW 재시작 생존)
@@ -129,5 +129,19 @@ self.addEventListener("fetch", (event) => {
     return;
   }
   // 셸/내비게이션: cache-first + network 폴백(정적 자산은 SHELL_VERSION 으로 무효화).
-  event.respondWith(caches.match(event.request).then((cached) => cached || fetch(event.request)));
+  // 다절 SPA: 프리캐시 밖 경로(/hansol/…, /discover/ 등)로의 네비게이션이 오프라인이면
+  // 캐시된 앱 셸(SHELL_ASSETS[0])로 폴백해 앱을 띄운다(클라이언트 라우팅이 slug 를 처리).
+  event.respondWith((async () => {
+    const cached = await caches.match(event.request);
+    if (cached) return cached;
+    try {
+      return await fetch(event.request);
+    } catch (err) {
+      if (event.request.mode === "navigate") {
+        const shell = await caches.match(SHELL_ASSETS[0]);
+        if (shell) return shell;
+      }
+      throw err;
+    }
+  })());
 });

@@ -1,7 +1,7 @@
 {
-  "name": "마음숲 · OO사",
+  "name": "마음숲",
   "short_name": "마음숲",
-  "description": "하루 한 편의 말씀과 3분 기도",
+  "description": "여러 절의 오늘 말씀·일정·소식을 한곳에서",
   "lang": "ko",
   "start_url": "/maeumsup/oosa/today/",
   "scope": "/maeumsup/",
