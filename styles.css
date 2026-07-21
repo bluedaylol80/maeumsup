@@ -106,6 +106,34 @@ a { color: inherit; }
   padding: 13px 20px 9px;
 }
 
+/* 배경 음악(BGM) 토글 — 헤더 오른쪽, 메뉴 버튼 왼편 */
+.bgm-toggle {
+  margin-left: auto;
+  margin-right: 2px;
+  padding: 7px 13px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 253, 248, 0.7);
+  color: var(--pine);
+  font-size: 0.82rem;
+  font-weight: 600;
+  min-width: auto;
+  min-height: 38px;
+  cursor: pointer;
+}
+.bgm-toggle::before {
+  content: "\266A";           /* ♪ */
+  margin-right: 5px;
+  font-size: 0.9em;
+  opacity: 0.85;
+}
+.bgm-toggle.is-playing {
+  background: var(--pine);
+  color: #fff;
+  border-color: var(--pine);
+}
+.bgm-toggle.is-playing::before { content: "\1F507"; margin-right: 4px; } /* 🔇 */
+
 .brand {
   display: inline-flex;
   align-items: center;

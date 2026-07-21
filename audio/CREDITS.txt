@@ -1,0 +1,13 @@
+배경 음악(BGM) 저작권 표기 — 마음숲 신도앱
+
+파일: bgm.mp3
+곡: Meditation Impromptu 01
+작곡/연주: Kevin MacLeod (incompetech.com)
+라이선스: Creative Commons Attribution 4.0 (CC BY 4.0)
+        https://creativecommons.org/licenses/by/4.0/
+
+상업적 사용 허용(출처표기 조건). 앱 내 표기 위치: 설정 화면 '배경 음악' 크레딧 줄.
+출처 검증: incompetech FAQ(2026-07-21 실측) — CC BY 4.0, commercial use permitted.
+
+교체 방법: 이 폴더의 bgm.mp3 를 새 음원으로 교체 후 재스테이징·배포.
+새 음원의 라이선스/표기를 반드시 이 파일과 설정 크레딧에 갱신할 것.

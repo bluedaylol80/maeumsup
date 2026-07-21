@@ -582,7 +582,18 @@
       node("p", { className: "settings-copy", text: "마음숲이 무엇이고 어떻게 쓰는지 처음 안내를 다시 봅니다." }),
       guideButton
     );
-    append(card, textGroup, guideGroup, resetGroup);
+    // 배경 음악 저작권 표기(CC BY 4.0 조건 — 발견 가능한 위치에 크레딧).
+    const musicGroup = node("section", { className: "settings-group", attrs: { "aria-labelledby": "music-title" } });
+    const creditLink = node("a", { className: "settings-copy", text: "Creative Commons BY 4.0", attrs: { href: "https://creativecommons.org/licenses/by/4.0/", target: "_blank", rel: "noopener noreferrer" } });
+    const creditWrap = node("p", { className: "settings-copy" });
+    creditWrap.textContent = "배경 음악: “Meditation Impromptu 01” — Kevin MacLeod (incompetech.com) · ";
+    creditWrap.appendChild(creditLink);
+    append(musicGroup,
+      node("h2", { id: "music-title", className: "settings-title", text: "배경 음악" }),
+      node("p", { className: "settings-copy", text: "헤더의 ‘노래 듣기’로 켜고 끌 수 있어요. 무음 선택은 이 기기에만 저장됩니다." }),
+      creditWrap
+    );
+    append(card, textGroup, guideGroup, musicGroup, resetGroup);
     append(page, sectionWrap(card));
     showScreen(page);
     document.title = `설정 · 마음숲`;
@@ -697,6 +708,56 @@
     document.body.classList.toggle("is-offline", !navigator.onLine);
   }
 
+  // 배경 음악(BGM) 컨트롤. 브라우저 자동재생 정책상 소리는 사용자가 '노래 듣기'를 눌러야 시작된다.
+  // 무음(정지) 선택과 재생 위치는 이 기기에만 저장(개인정보 무수집 원칙)한다. 다중 페이지 앱이라
+  // 화면 이동 시 저장한 위치에서 이어 재생을 시도한다(자동재생이 막히면 다시 '노래 듣기'로 표시).
+  const BGM_SRC = "/maeumsup/audio/bgm.mp3";
+  function setupBgm() {
+    const header = document.querySelector(".site-header");
+    const menuButton = document.getElementById("open-more");
+    if (!header || !menuButton) return;
+    const audio = new Audio(BGM_SRC);
+    audio.loop = true;
+    audio.preload = "none";
+    const savedTime = parseFloat(safeGet("bgmTime") || "0");
+    if (savedTime > 0 && isFinite(savedTime)) { try { audio.currentTime = savedTime; } catch (e) { /* metadata 전 */ } }
+    const button = node("button", { id: "bgm-toggle", className: "quiet-button bgm-toggle", attrs: { type: "button", "aria-pressed": "false" } });
+    function setLabel(playing) {
+      button.textContent = playing ? "무음" : "노래 듣기";
+      button.setAttribute("aria-label", playing ? "배경 음악 끄기" : "배경 음악 듣기");
+      button.setAttribute("aria-pressed", String(playing));
+      button.classList.toggle("is-playing", playing);
+    }
+    setLabel(false);
+    header.insertBefore(button, menuButton);
+    let lastSaved = 0;
+    async function play() {
+      try {
+        const t = parseFloat(safeGet("bgmTime") || "0");
+        if (t > 0 && isFinite(t)) { try { audio.currentTime = t; } catch (e) {} }
+        await audio.play();
+        safeSet("bgmOn", "on");
+        setLabel(true);
+      } catch (e) {
+        safeSet("bgmOn", "on");   // 의사는 재생 — 다음 상호작용에서 시도
+        setLabel(false);          // 자동재생 차단: '노래 듣기'로 남겨 탭 유도
+      }
+    }
+    function pause() {
+      audio.pause();
+      safeSet("bgmTime", String(audio.currentTime || 0));
+      safeSet("bgmOn", "off");
+      setLabel(false);
+    }
+    button.addEventListener("click", () => { if (audio.paused) play(); else pause(); });
+    audio.addEventListener("timeupdate", () => {
+      const now = audio.currentTime || 0;
+      if (Math.abs(now - lastSaved) >= 3) { lastSaved = now; safeSet("bgmTime", String(now)); }
+    });
+    window.addEventListener("pagehide", () => { if (!audio.paused) safeSet("bgmTime", String(audio.currentTime || 0)); });
+    if (safeGet("bgmOn") === "on") play();   // 재방문/화면이동 시 이어 재생 시도
+  }
+
   // 첫 사용 온보딩. 처음 방문한 신도에게 이 앱이 무엇이고 어떻게 쓰는지, 그리고 개인정보를
   // 모으지 않는다는 점을 조용히 안내한다. 본 적 있으면(localStorage) 뜨지 않는다.
   // force=true(설정의 '다시 보기')면 항상 표시. 개인정보 무수집 원칙에 맞게 로컬 플래그만 사용.
@@ -744,6 +805,7 @@
   async function boot() {
     applyTextScale(safeGet("textScale"));
     setupMenu();
+    setupBgm();
     updateConnectivity();
     window.addEventListener("online", updateConnectivity);
     window.addEventListener("offline", updateConnectivity);
