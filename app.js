@@ -718,7 +718,8 @@
     if (!header || !menuButton) return;
     const audio = new Audio(BGM_SRC);
     audio.loop = true;
-    audio.preload = "none";
+    audio.preload = "auto";   // 모바일에서 탭 즉시 재생되도록 미리 로드
+    audio.setAttribute("playsinline", "");
     const savedTime = parseFloat(safeGet("bgmTime") || "0");
     if (savedTime > 0 && isFinite(savedTime)) { try { audio.currentTime = savedTime; } catch (e) { /* metadata 전 */ } }
     const button = node("button", { id: "bgm-toggle", className: "quiet-button bgm-toggle", attrs: { type: "button", "aria-pressed": "false" } });
@@ -731,16 +732,28 @@
     setLabel(false);
     header.insertBefore(button, menuButton);
     let lastSaved = 0;
-    async function play() {
-      try {
-        const t = parseFloat(safeGet("bgmTime") || "0");
-        if (t > 0 && isFinite(t)) { try { audio.currentTime = t; } catch (e) {} }
-        await audio.play();
+    function play(userInitiated) {
+      // iOS Safari는 사용자 제스처 핸들러 내에서 play()가 '먼저' 호출돼야 소리를 허용한다.
+      // 따라서 play()를 동기로 먼저 부르고, 저장 위치 복원은 그 뒤 best-effort 로 처리한다.
+      const promise = audio.play();
+      const t = parseFloat(safeGet("bgmTime") || "0");
+      if (t > 0 && isFinite(t)) { try { audio.currentTime = t; } catch (e) {} }
+      if (promise && typeof promise.then === "function") {
+        promise.then(() => {
+          safeSet("bgmOn", "on");
+          setLabel(true);
+          if (userInitiated && safeGet("bgmHintShown") !== "1") {
+            safeSet("bgmHintShown", "1");
+            showToast("소리가 안 들리면 휴대폰 무음(벨소리) 스위치와 볼륨을 확인해 주세요");
+          }
+        }).catch(() => {
+          safeSet("bgmOn", "on");     // 의사는 재생 — 다음 상호작용에서 재시도
+          setLabel(false);
+          if (userInitiated) showToast("브라우저가 재생을 막았어요. 화면을 한 번 더 눌러 주세요");
+        });
+      } else {
         safeSet("bgmOn", "on");
         setLabel(true);
-      } catch (e) {
-        safeSet("bgmOn", "on");   // 의사는 재생 — 다음 상호작용에서 시도
-        setLabel(false);          // 자동재생 차단: '노래 듣기'로 남겨 탭 유도
       }
     }
     function pause() {
@@ -749,13 +762,13 @@
       safeSet("bgmOn", "off");
       setLabel(false);
     }
-    button.addEventListener("click", () => { if (audio.paused) play(); else pause(); });
+    button.addEventListener("click", () => { if (audio.paused) play(true); else pause(); });
     audio.addEventListener("timeupdate", () => {
       const now = audio.currentTime || 0;
       if (Math.abs(now - lastSaved) >= 3) { lastSaved = now; safeSet("bgmTime", String(now)); }
     });
     window.addEventListener("pagehide", () => { if (!audio.paused) safeSet("bgmTime", String(audio.currentTime || 0)); });
-    if (safeGet("bgmOn") === "on") play();   // 재방문/화면이동 시 이어 재생 시도
+    if (safeGet("bgmOn") === "on") play(false);   // 재방문/화면이동 시 이어 재생 시도(제스처 없음 → 조용히)
   }
 
   // 첫 사용 온보딩. 처음 방문한 신도에게 이 앱이 무엇이고 어떻게 쓰는지, 그리고 개인정보를
