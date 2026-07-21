@@ -13,7 +13,7 @@
 //   · 콘텐츠(/data/<tenant>/*.json)        = network-first + evict-on-non-OK + offline 폴백
 //   · release marker(manifestHash)          = release 변경 시 콘텐츠 캐시 무효화
 
-const SHELL_VERSION = "v6";                     // v4=온보딩·v5=BGM·v6=BGM 모바일재생 개선(2026-07-21).
+const SHELL_VERSION = "v7";                     // v4=온보딩·v5=BGM·v6=모바일개선·v7=오디오 SW 바이패스(range 재생 fix, 2026-07-21).
 const SHELL_CACHE = `maumsup-shell-${SHELL_VERSION}`;
 const CONTENT_CACHE = "maumsup-content-v3";      // 콘텐츠 network-first 캐시(고정 이름)
 const META_CACHE = "maumsup-meta";              // release 포인터 보관(SW 재시작 생존)
@@ -120,6 +120,10 @@ self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
   const url = new URL(event.request.url);
   if (url.origin !== self.location.origin) return;
+  // 오디오/미디어는 SW 가 가로채지 않는다 — <audio> 는 Range(부분) 요청으로 스트리밍하는데
+  // SW 가 cache-first fetch 로 개입하면 206 처리가 어긋나 재생이 조용히 멈춘다(play()는 성공하나 무음).
+  // return 으로 respondWith 를 생략 → 브라우저 native Range 로딩에 맡긴다.
+  if (/\.(mp3|ogg|m4a|wav|aac|opus)$/i.test(url.pathname)) return;
   if (DATA_RE.test(url.pathname)) {
     event.respondWith(networkFirstContent(event.request, RELEASE_RE.test(url.pathname)));
     return;
