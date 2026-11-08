@@ -2,7 +2,7 @@
   "schemaVersion": "1",
   "tenant": "oosa",
   "type": "release",
-  "releaseId": "rel-20260721T005155Z",
-  "manifestHash": "sha256:b52ae6c7b04712ea645d9c577b6d2fdca721996d7ba06cbc3f394c3c924cb53a",
-  "createdAt": "2026-07-21T09:51:55.020+09:00"
+  "releaseId": "rel-20261108T184014Z",
+  "manifestHash": "sha256:81bc34d1d9174c9b000aed10725a89236425935c367c986f79698cf7300db79a",
+  "createdAt": "2026-11-09T03:40:14.928+09:00"
 }
